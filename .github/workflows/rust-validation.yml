@@ -1,0 +1,19 @@
+name: Repository documentation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  metadata:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Require project documentation
+        run: python3 -c "from pathlib import Path; p=Path('README.md'); assert p.is_file() and p.stat().st_size > 0, 'README.md is missing or empty'"
+
