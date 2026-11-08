@@ -1,9 +1,10 @@
 [package]
-name = "_Dante"
+name = "sigmaos_dante"
 version = "0.1.0"
 edition = "2021"
-description = "SigmaOS SigmaOS--Dante component"
 license = "MIT"
-repository = "https://github.com/AaryanSinghChauhan09/SigmaOS--Dante"
+description = "SigmaOS -Dante component inspired by Linux Mint / Omarchy / Arch Linux."
 
-[dependencies]
+[lib]
+name = "sigmaos_dante"
+path = "src/lib.rs"
