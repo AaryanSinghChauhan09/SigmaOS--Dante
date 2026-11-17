@@ -3,12 +3,12 @@ name = "SigmaOS--Dante"
 tier = 2
 stability = "scaffold"
 language = "rust"
-description = "-Dante component"
+description = "SigmaOS component; consult its README for scope and implementation status."
 upstream = []
 
 [contract]
 provides = ["component"]
-depends_on = []
+depends_on = ["SigmaOS-system"]
 
 [maturity]
 status = "Scaffold"
