@@ -64,33 +64,69 @@ impl Tool {
 mod tests {
     use super::*;
 
+    /// Test: status_and_version
+    /// Arrange: Create a Tool instance with name "demo"
+    /// Act: Run "status" and "version" subcommands
+    /// Assert: Verify expected output format
     #[test]
     fn status_and_version() {
+        // Arrange
         let t = Tool::new("demo").unwrap();
-        assert_eq!(t.run(&["status"]).unwrap(), "demo: ready");
-        assert!(t.run(&["version"]).unwrap().contains("0.1.0"));
+
+        // Act
+        let status_result = t.run(&["status"]);
+        let version_result = t.run(&["version"]);
+
+        // Assert
+        assert_eq!(status_result.unwrap(), "demo: ready");
+        assert!(version_result.unwrap().contains("0.1.0"));
     }
 
+    /// Test: no_args_shows_help
+    /// Arrange: Create a Tool instance with name "demo"
+    /// Act: Run with no arguments (should show help)
+    /// Assert: Help message is displayed
     #[test]
     fn no_args_shows_help() {
+        // Arrange
         let t = Tool::new("demo").unwrap();
-        assert!(t.run(&[]).unwrap().contains("commands"));
+
+        // Act
+        let help_output = t.run(&[]);
+
+        // Assert
+        assert!(help_output.unwrap().contains("commands"));
     }
 
+    /// Test: unknown_command_fails
+    /// Arrange: Create a Tool instance with name "demo"
+    /// Act: Run with unrecognized subcommand "bogus"
+    /// Assert: Returns ToolError::UnknownCommand
     #[test]
     fn unknown_command_fails() {
+        // Arrange
         let t = Tool::new("demo").unwrap();
-        assert!(matches!(t.run(&["bogus"]), Err(ToolError::UnknownCommand(_))));
+
+        // Act
+        let result = t.run(&["bogus"]);
+
+        // Assert
+        assert!(matches!(result, Err(ToolError::UnknownCommand(_))));
     }
 
+    /// Test: empty_name_fails
+    /// Arrange: Test Tool::new with empty/whitespace name
+    /// Act: Call Tool::new with " " (space)
+    /// Assert: Returns error (EmptyName)
     #[test]
     fn empty_name_fails() {
+        // Arrange & Act & Assert
         assert!(Tool::new(" ").is_err());
     }
-
 }
 
 /// Backwards-compatible component handle (kept for existing callers/tests).
+/// Follows Single Responsibility Principle: only holds component name state.
 #[derive(Debug, Default)]
 pub struct Component {
     name: &'static str,
@@ -98,7 +134,13 @@ pub struct Component {
 
 impl Component {
     /// Create the component handle.
+    /// Fail-fast: always succeeds as name has default value.
     pub fn new() -> Self {
         Self { name: "SigmaOS Component" }
+    }
+
+    /// Get the component name for inspection/verification.
+    pub fn name(&self) -> &str {
+        &self.name
     }
 }
